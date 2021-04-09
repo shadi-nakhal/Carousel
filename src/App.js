@@ -3,7 +3,6 @@ import React, { useState } from "react";
 const styles = {
   container: {
     width: "50%",
-    margin: "10px 10px",
   },
   carousel: {
     border: "2px solid #ccc",
@@ -75,11 +74,15 @@ const list = [
   { text: "Content for panel 4" },
   { text: "Content for panel 5" },
   { text: "Content for panel 6" },
+  { text: "Content for panel 7" },
+  { text: "Content for panel 8" },
+  { text: "Content for panel 9" },
 ];
 
 function App() {
-  var [transPos, setTransPos] = useState();
+  var [transPos, setTransPos] = useState(100 / list.length);
   var [index, setIndex] = useState(0);
+  var [silderWidth, setSliderWidth] = useState(list.length * 100);
   const handlePos = (e) => {
     switch (e) {
       case "right":
@@ -98,7 +101,7 @@ function App() {
         } else setIndex(list.length - 1);
     }
   };
-
+  console.log(silderWidth);
   return (
     <div>
       <div className="container" style={styles.container}>
@@ -107,7 +110,8 @@ function App() {
             className="slider"
             style={{
               ...styles.slider,
-              transform: "translate(-" + index * 17 + "%)",
+              width: silderWidth + "%",
+              transform: "translate(-" + index * transPos + "%)",
             }}
           >
             {list.map((item) => {
