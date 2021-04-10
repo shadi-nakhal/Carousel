@@ -3,14 +3,14 @@ import React, { useState } from "react";
 const styles = {
   container: {
     width: "100%",
-    margin: "10px 10px",
-    minWidth: "220px",
+    minWidth: "100px",
   },
   carousel: {
     border: "2px solid #ccc",
-    height: "400px",
+    height: "500px",
     overflow: "hidden",
     position: "relative",
+    textAlign: "center",
   },
   slider: {
     height: "100%",
@@ -69,13 +69,17 @@ const styles = {
   },
   controller: {
     position: "absolute",
-    bottom: "20px",
+    bottom: "10px",
     left: "50%",
     transform: "translate(-50%)",
     listStyle: "none",
     display: "flex",
     padding: "0px",
     margin: "0px",
+    flexBasis: "100%",
+    width: "100%",
+    flexWrap: "Wrap",
+    justifyContent: "center",
   },
   controllerButton: {
     width: "8px",
@@ -144,16 +148,20 @@ function Carousel({ items = [] }) {
           </div>
           <div>
             <span
-              onMouseEnter={() => setLeft(true)}
-              onMouseLeave={() => setLeft(false)}
+              onPointerEnter={() => setLeft(true)}
+              onPointerLeave={() => setLeft(false)}
+              //   onMouseEnter={() => setLeft(true)}
+              //   onMouseLeave={() => setLeft(false)}
               onClick={() => handlePos("left")}
               style={{ ...styles.left, opacity: left ? "0.7" : "0.2" }}
             >
               <i style={styles.arrowleft}></i>
             </span>
             <span
-              onMouseEnter={() => setRight(true)}
-              onMouseLeave={() => setRight(false)}
+              onPointerEnter={() => setRight(true)}
+              onPointerLeave={() => setRight(false)}
+              //   onMouseEnter={() => setRight(true)}
+              //   onMouseLeave={() => setRight(false)}
               onClick={() => handlePos("right")}
               style={{ ...styles.right, opacity: right ? "0.7" : "0.2" }}
             >

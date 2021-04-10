@@ -1,13 +1,50 @@
 import React from "react";
 import Carousel from "./Components/Carousel";
 
-const items = [
-  <p>lala</p>,
+const items2 = [
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat,
+    neque in faucibus placerat, odio mi commodo dui, ut lobortis massa tellus
+    eget urna. Cras interdum urna lacus, et pulvinar est commodo in. Morbi
+    feugiat vel nisl at consequat. Vestibulum vestibulum augue ac augue finibus,
+  </p>,
   <img src="https://picsum.photos/200/300" alt="lala" />,
   <img src="https://picsum.photos/500/300" alt="lala" />,
   <img src="https://picsum.photos/1000/1000" alt="lala" />,
-  <span>bateekh</span>,
-  <span>bateek2h</span>,
+  <img src="https://picsum.photos/200/300" alt="lala" />,
+];
+
+const items = [
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat,
+    neque in faucibus placerat, odio mi commodo dui, ut lobortis massa tellus
+    eget urna. Cras interdum urna lacus, et pulvinar est commodo in. Morbi
+    feugiat vel nisl at consequat. Vestibulum vestibulum augue ac augue finibus,
+  </p>,
+  <img src="https://picsum.photos/200/300" alt="lala" />,
+  <img src="https://picsum.photos/500/300" alt="lala" />,
+  <img src="https://picsum.photos/1000/1000" alt="lala" />,
+  <img src="https://picsum.photos/200/300" alt="lala" />,
+  <img src="https://picsum.photos/500/300" alt="lala" />,
+  <img src="https://picsum.photos/1000/1000" alt="lala" />,
+  <img src="https://picsum.photos/200/300" alt="lala" />,
+  <img src="https://picsum.photos/500/300" alt="lala" />,
+  <img src="https://picsum.photos/1000/1000" alt="lala" />,
+  <img src="https://picsum.photos/200/300" alt="lala" />,
+  <img src="https://picsum.photos/500/300" alt="lala" />,
+  <img src="https://picsum.photos/1000/1000" alt="lala" />,
+  <img src="https://picsum.photos/200/300" alt="lala" />,
+  <img src="https://picsum.photos/500/300" alt="lala" />,
+  <img src="https://picsum.photos/1000/1000" alt="lala" />,
+  <span style={{ paddingBottom: "25%", margin: "20px" }}>
+    <Carousel items={items2} />
+  </span>,
+  <span>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat,
+    neque in faucibus placerat, odio mi commodo dui, ut lobortis massa tellus
+    eget urna. Cras interdum urna lacus, et pulvinar est commodo in. Morbi
+    feugiat vel nisl at consequat. Vestibulum vestibulum augue ac augue finibus,
+  </span>,
 ];
 
 function App() {
@@ -16,16 +53,15 @@ function App() {
       style={{
         display: "flex",
         flexDirection: "row",
-        width: "50%",
-        margin: "auto",
       }}
     >
       <div
         style={{
           display: "flex",
-          width: "100%",
           flexDirection: "column",
-          flexWrap: "wrap",
+          justifyContent: "center",
+          width: "80%",
+          margin: "auto",
         }}
       >
         <Carousel items={items} />
