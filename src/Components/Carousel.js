@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const styles = {
   container: {
@@ -13,6 +13,7 @@ const styles = {
     textAlign: "center",
   },
   slider: {
+    position: "absolute",
     height: "100%",
     display: "flex",
     transition: "all 0.5s",
@@ -22,6 +23,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    cursor: "grab",
     // overflow: "hidden",
   },
   left: {
@@ -101,13 +103,19 @@ function Carousel({ items = [] }) {
       props: { ...item.props, width: "100%", height: "100%" },
     };
   });
-
+  const mobile = window.screen.width < 1300;
   const [transPos, setTransPos] = useState(100 / list.length);
   const [silderWidth, setSliderWidth] = useState(list.length * 100);
   const [right, setRight] = useState(false);
   const [left, setLeft] = useState(false);
   const [index, setIndex] = useState(0);
-
+  const [down, setDown] = useState(false);
+  const [InitPos, setInitPos] = useState(null);
+  const [moving, setmoving] = useState(false);
+  const [Current, setCurrent] = useState();
+  const Position = useRef({
+    Postion: 0,
+  });
   const handlePos = (e) => {
     switch (e) {
       case "right":
@@ -116,7 +124,6 @@ function Carousel({ items = [] }) {
           return;
         } else {
           setIndex(0);
-          console.log(index);
           break;
         }
       case "left":
@@ -127,6 +134,79 @@ function Carousel({ items = [] }) {
     }
   };
 
+  const HandleDown = (e) => {
+    let pos;
+    if (mobile) {
+      pos = e.touches[0].clientX;
+    } else {
+      pos = e.clientX;
+    }
+    setInitPos(pos);
+    setDown(true);
+    Position.current.Postion = Current;
+  };
+
+  const HandleUp = (e) => {
+    setDown(false);
+    if (
+      Current &&
+      Math.abs(Current) > 100 &&
+      Math.abs(Current) < 1000 &&
+      moving
+    ) {
+      if (Current < -100) {
+        if (index < list.length - 1) {
+          setIndex(index + 1);
+          setCurrent();
+        } else {
+          setIndex(0);
+          setCurrent();
+        }
+      } else if (Current > 100) {
+        if (index > 0) {
+          setIndex(index - 1);
+          setCurrent();
+        } else {
+          setIndex(list.length - 1);
+          setCurrent();
+        }
+      }
+    }
+    setCurrent();
+    setmoving(false);
+    setDown(false);
+    Position.current.Postion = Current;
+  };
+
+  const HandleMove = (e) => {
+    let move;
+    if (mobile) {
+      move = e.touches[0].clientX;
+      console.log("passed");
+    } else {
+      move = e.clientX;
+    }
+    if (down && Math.abs(move) > 50) {
+      setCurrent(move - InitPos);
+
+      if (Current && Math.abs(Current) > 10) {
+        Position.current.Postion = Math.round(
+          Current + e.currentTarget.getBoundingClientRect().x
+        );
+        setmoving(true);
+      }
+    } else {
+      Position.current.Postion = Current;
+      setmoving(false);
+      setDown(false);
+      setCurrent();
+    }
+  };
+
+  const HandleTest = (e) => {
+    console.log(e);
+  };
+  console.log(moving);
   return (
     <div>
       <div style={styles.container}>
@@ -135,8 +215,18 @@ function Carousel({ items = [] }) {
             style={{
               ...styles.slider,
               width: silderWidth + "%",
-              transform: "translate(-" + index * transPos + "%)",
+              touchAction: "none",
+              transform: down
+                ? "translateX(" + Position.current.Postion + "px)"
+                : "translate(-" + index * transPos + "%)",
             }}
+            onMouseMove={!mobile ? (e) => HandleMove(e) : null}
+            onMouseDown={!mobile ? (e) => HandleDown(e) : null}
+            onMouseUp={!mobile ? (e) => HandleUp(e) : null}
+            onMouseLeave={!mobile ? () => HandleUp() : null}
+            onTouchStart={mobile ? (e) => HandleDown(e) : null}
+            onTouchMove={mobile ? (e) => HandleMove(e) : null}
+            onTouchEnd={mobile ? (e) => HandleUp(e) : null}
           >
             {list.map((item, i) => {
               return (
@@ -153,7 +243,11 @@ function Carousel({ items = [] }) {
               //   onMouseEnter={() => setLeft(true)}
               //   onMouseLeave={() => setLeft(false)}
               onClick={() => handlePos("left")}
-              style={{ ...styles.left, opacity: left ? "0.7" : "0.2" }}
+              style={{
+                ...styles.left,
+                opacity: left ? "0.7" : "0.2",
+                zIndex: 0,
+              }}
             >
               <i style={styles.arrowleft}></i>
             </span>
