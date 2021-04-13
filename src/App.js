@@ -1,5 +1,5 @@
 import React from "react";
-import Carousel from "./Components/Carousel";
+import Carousel from "./Components/Carousel/Carousel";
 
 const items2 = [
   <p>
@@ -39,10 +39,10 @@ const items = [
   <span
     style={{
       width: "80%",
-      paddingBottom: "10%",
+      marginBottom: "50px",
     }}
   >
-    <Carousel items={items2} />
+    <Carousel swipeOff items={items2} />
   </span>,
   <span>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat,
@@ -54,23 +54,36 @@ const items = [
 
 function App() {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-      }}
-    >
-      <div
+    <div>
+      <h1
+        style={{
+          textAlign: "center",
+          fontFamily: "'Dancing Script', cursive",
+        }}
+      >
+        Carousel.
+      </h1>
+      <section
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
           width: "80%",
           margin: "auto",
+          marginTop: "5%",
         }}
       >
-        <Carousel items={items} />
-        <Carousel items={items} />
+        <div style={{ marginBottom: "5%" }}>
+          <Carousel height="300px" items={items} />
+        </div>
+        <div style={{ marginBottom: "5%" }}>
+          <Carousel items={items} />
+        </div>
+        <div style={{ marginBottom: "5%" }}>
+          <Carousel items={items} />
+        </div>
+      </section>
+      <div style={{ margin: "2%", marginBottom: "5%" }}>
+        <Carousel height="80vh" width="95vw" items={items} />
       </div>
     </div>
   );
