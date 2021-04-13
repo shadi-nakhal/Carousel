@@ -22,7 +22,7 @@
 
 ##### swipeOff to disable swipes
 
-##### items is a list, example :
+##### items is an array, example :
 
 ```javascript
 const items2 = [
