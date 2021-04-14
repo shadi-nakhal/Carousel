@@ -4,15 +4,15 @@
 
 ### Install dependancies
 
-##### npm install
+`npm install`
 
 ### Start development server on port 3000
 
-##### npm start
+`npm start`
 
 ### Build a production bundle in "./dist"
 
-##### npm run build
+`npm run build`
 
 ### Carousel componant
 
