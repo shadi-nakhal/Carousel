@@ -2,41 +2,40 @@ import React from "react";
 import Carousel from "./Components/Carousel/Carousel";
 
 const items2 = [
+  <img src="https://picsum.photos/200/300" alt="picture" />,
+
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat,
     neque in faucibus placerat, odio mi commodo dui, ut lobortis massa tellus
     eget urna. Cras interdum urna lacus, et pulvinar est commodo in. Morbi
     feugiat vel nisl at consequat. Vestibulum vestibulum augue ac augue finibus,
   </p>,
-  <img src="https://picsum.photos/200/300" alt="picture" />,
   <img src="https://picsum.photos/500/300" alt="picture" />,
   <img src="https://picsum.photos/1000/1000" alt="picture" />,
   <img src="https://picsum.photos/200/300" alt="picture" />,
 ];
 
 const items = [
+  <img src="https://picsum.photos/500/300" alt="picture" />,
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat,
     neque in faucibus placerat, odio mi commodo dui, ut lobortis massa tellus
     eget urna. Cras interdum urna lacus, et pulvinar est commodo in. Morbi
     feugiat vel nisl at consequat. Vestibulum vestibulum augue ac augue finibus,
   </p>,
+
   <img src="https://picsum.photos/200/300" alt="picture" />,
   <img src="https://picsum.photos/500/300" alt="picture" />,
   <img src="https://picsum.photos/1000/1000" alt="picture" />,
   <img src="https://picsum.photos/200/300" alt="picture" />,
-  <img src="https://picsum.photos/500/300" alt="picture" />,
-  <img src="https://picsum.photos/1000/1000" alt="picture" />,
-  <img src="https://picsum.photos/200/300" alt="picture" />,
-  <img src="https://picsum.photos/500/300" alt="picture" />,
-  <img src="https://picsum.photos/1000/1000" alt="picture" />,
-  <img src="https://picsum.photos/200/300" alt="picture" />,
-  <img src="https://picsum.photos/500/300" alt="picture" />,
-  <img src="https://picsum.photos/1000/1000" alt="picture" />,
-  <img src="https://picsum.photos/200/300" alt="picture" />,
-  <img src="https://picsum.photos/500/300" alt="picture" />,
-  <img src="https://picsum.photos/1000/1000" alt="picture" />,
   <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>,
+  <img src="https://picsum.photos/1000/1000" alt="picture" />,
+  <img src="https://picsum.photos/200/300" alt="picture" />,
+  <img src="https://picsum.photos/500/300" alt="picture" />,
+  <img src="https://picsum.photos/1000/1000" alt="picture" />,
+  <img src="https://picsum.photos/200/300" alt="picture" />,
+  <img src="https://picsum.photos/500/300" alt="picture" />,
+  <img src="https://picsum.photos/1000/1000" alt="picture" />,
   <span
     style={{
       width: "80%",
@@ -45,6 +44,10 @@ const items = [
   >
     <Carousel swipeOff items={items2} />
   </span>,
+  <img src="https://picsum.photos/200/300" alt="picture" />,
+  <img src="https://picsum.photos/500/300" alt="picture" />,
+  <img src="https://picsum.photos/1000/1000" alt="picture" />,
+
   <span>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat,
     neque in faucibus placerat, odio mi commodo dui, ut lobortis massa tellus
