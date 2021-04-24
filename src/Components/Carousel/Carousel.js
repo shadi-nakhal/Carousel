@@ -7,9 +7,14 @@ function Carousel({
   height = "60vh",
   width = "100%",
 }) {
-  /*Mapping children to add props */
+  const mobile = window.screen.width < 1300;
 
-  const list = children.map((item) => {
+  /*children is opaque data structure,
+   so this makes sure its always an array and ready to map over */
+  const makingList = Array.isArray(children) ? children : [children];
+
+  /*Mapping children to add props */
+  const list = makingList.map((item) => {
     let controller = "";
     if (swipeOff == true) {
       controller = "controller";
@@ -18,10 +23,13 @@ function Carousel({
       ...item,
       props: {
         ...item.props,
-        onMouseDown: (e) => HandleDown(e),
-        onMouseMove: (e) => HandleMove(e),
-        onMouseUp: (e) => HandleUp(e),
-        onMouseLeave: (e) => handleLeaving(e),
+        onMouseDown: !mobile ? (e) => HandleDown(e) : null,
+        onMouseMove: !mobile ? (e) => HandleMove(e) : null,
+        onMouseUp: !mobile ? (e) => HandleUp(e) : null,
+        onMouseLeave: !mobile ? (e) => handleLeaving(e) : null,
+        onTouchStart: mobile ? (e) => HandleDown(e) : null,
+        onTouchMove: mobile ? (e) => HandleMove(e) : null,
+        onTouchEnd: mobile ? (e) => HandleUp(e) : null,
         id: controller,
         className: item.props.className + " " + "inside",
         width: "100%",
@@ -29,8 +37,7 @@ function Carousel({
       },
     };
   });
-
-  const mobile = window.screen.width < 1300;
+  console.log(list.length);
   const [transPos, setTransPos] = useState(100 / list.length);
   const [silderWidth, setSliderWidth] = useState(list.length * 100);
   const [right, setRight] = useState(false);
@@ -66,12 +73,16 @@ function Carousel({
     e.preventDefault();
     const track = e.target.parentElement;
     down = true;
-    InitPos = e.clientX;
+    if (e.clientX) {
+      InitPos = e.clientX;
+    } else {
+      InitPos = e.touches[0].clientX;
+    }
     const transformMatrix = window
       .getComputedStyle(track)
       .getPropertyValue("transform");
     if (transformMatrix !== "none") {
-      transform = parseInt(transformMatrix.split(",")[4].trim());
+      transform = Number(transformMatrix.split(",")[4].trim());
     }
   };
 
@@ -80,9 +91,12 @@ function Carousel({
     if (down) {
       moving = true;
       let move;
-      move = e.clientX;
+      if (e.clientX) {
+        move = e.clientX;
+      } else {
+        move = e.touches[0].clientX;
+      }
       Current = move - InitPos;
-      console.log(Current);
       e.target.parentElement.style.transform = `translateX(${
         Current + transform
       }px)`;
@@ -126,7 +140,6 @@ function Carousel({
       !elementMouseIsOver.classList.contains("inside") &&
       elementMouseIsOver.id !== "controller"
     ) {
-      console.log(elementMouseIsOver.id);
       HandleUp(e);
     }
   };
@@ -149,10 +162,13 @@ function Carousel({
       <div
         style={{
           display: "flex",
-          width: `${list.length * 100}%`,
+          width: `${silderWidth}%`,
           touchAction: "none",
           transform: "translate(-" + index * transPos + "%)",
-          transition: "all 0.1s",
+          // transition: "all 0.1s",
+          "-webkit-transition": !mobile
+            ? "-webkit-transform 50ms"
+            : "-webkit-transform 00ms",
           userSelect: "none",
           flexBasis: "100%",
           display: "flex",
