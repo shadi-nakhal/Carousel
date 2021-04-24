@@ -77,18 +77,27 @@ function App() {
         }}
       >
         <div style={{ marginBottom: "5%" }}>
-          <Carousel height="300px" items={items} />
+          <Carousel height="300px">
+          <img src="https://picsum.photos/200/300" alt="picture" />
+  <img src="https://picsum.photos/500/300" alt="picture" />
+  <img src="https://picsum.photos/1000/1000" alt="picture" />
+  <img src="https://picsum.photos/1000/1000" alt="picture" />
+  <img src="https://picsum.photos/200/300" alt="picture" />
+  <img src="https://picsum.photos/500/300" alt="picture" />
+  <img src="https://picsum.photos/1000/1000" alt="picture" />
+  <img src="https://picsum.photos/200/300" alt="picture" />
+          </Carousel>
         </div>
-        <div style={{ marginBottom: "5%" }}>
+        {/* <div style={{ marginBottom: "5%" }}>
           <Carousel items={items} />
         </div>
         <div style={{ marginBottom: "5%" }}>
           <Carousel items={items} />
-        </div>
+        </div> */}
       </section>
-      <div style={{ margin: "2%", marginBottom: "5%" }}>
+      {/* <div style={{ margin: "2%", marginBottom: "5%" }}>
         <Carousel height="80vh" width="95vw" items={items} />
-      </div>
+      </div> */}
     </div>
   );
 }

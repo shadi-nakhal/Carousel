@@ -13,7 +13,7 @@ const styles = {
     position: "absolute",
     height: "100%",
     display: "flex",
-    transition: "all 0.5s",
+    transition: "all 0.2s",
   },
   section: {
     flexBasis: "100%",
@@ -22,6 +22,8 @@ const styles = {
     alignItems: "center",
     cursor: "pointer",
     // overflow: "hidden",
+    userSelect: "none",
+    draggable: "false",
   },
   left: {
     position: "absolute",
