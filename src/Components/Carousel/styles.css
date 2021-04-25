@@ -5,6 +5,7 @@
   text-align: center;
   user-select: none;
   -webkit-user-drag: false;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .Carousel-Container {
@@ -24,7 +25,6 @@
   text-align: center;
   max-width: 100%;
   touch-action: none;
-  position: inline-block;
   padding-left: 0 !important;
   padding-right: 0 !important;
   -webkit-user-drag: none;
@@ -46,7 +46,8 @@
   transform: translateY(-50%);
 }
 
-.Car-Left:hover {
+.Car-Left:hover,
+.Car-Left:active {
   opacity: 0.7;
 }
 
@@ -73,7 +74,8 @@
   transform: translateY(-50%);
 }
 
-.Car-Right:hover {
+.Car-Right:hover,
+.Car-Right:active {
   opacity: 0.7;
 }
 

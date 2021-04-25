@@ -50,12 +50,13 @@ function App() {
         >
           <div>
             <Carousel height="300px">
+              <img src="https://picsum.photos/900/400" alt="picture" />
               <img src="https://picsum.photos/1000/400" alt="picture" />
               <img src="https://picsum.photos/600/400" alt="picture" />
               <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>
               <img src="https://picsum.photos/700/400" alt="picture" />
               <img src="https://picsum.photos/800/400" alt="picture" />
-              <img src="https://picsum.photos/900/400" alt="picture" />
+
               <p style={{ paddingTop: "4%" }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent volutpat, neque in faucibus placerat, odio mi commodo
@@ -69,8 +70,10 @@ function App() {
           </div>
           <div>
             <Carousel height="300px">
-              <img src="https://picsum.photos/1000/400" alt="picture" />
+              <img src="https://picsum.photos/700/300" alt="picture" />
               <img src="https://picsum.photos/800/400" alt="picture" />
+              <img src="https://picsum.photos/1000/400" alt="picture" />
+
               <img src="https://picsum.photos/500/400" alt="picture" />
               <img src="https://picsum.photos/500/300" alt="picture" />
               <img src="https://picsum.photos/600/400" alt="picture" />
@@ -82,7 +85,6 @@ function App() {
                 lacus, et pulvinar est commodo in. Morbi feugiat vel nisl at
                 consequat. Vestibulum vestibulum augue ac augue finibus,
               </p>
-              <img src="https://picsum.photos/700/300" alt="picture" />
               <img src="https://picsum.photos/900/300" alt="picture" />
             </Carousel>
           </div>

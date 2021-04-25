@@ -7,22 +7,22 @@ function Carousel({
   height = "60vh",
   width = "100%",
 }) {
-  const mobile = window.screen.width < 1300;
-
   /*children is opaque data structure,
    so this makes sure its always an array and ready to map over */
   const makingList = Array.isArray(children) ? children : [children];
 
   /*Mapping children to add props */
-  const list = makingList.map((item) => {
+  const list = makingList.map((item, index) => {
     let controller = "";
-    if (swipeOff == true) {
+    let modifiedItem = item;
+    if (swipeOff == true || item.props.swipeOff == true) {
       controller = "controller";
     }
+
     return {
-      ...item,
+      ...modifiedItem,
       props: {
-        ...item.props,
+        ...modifiedItem.props,
         onMouseDown: !mobile ? (e) => HandleDown(e) : null,
         onMouseMove: !mobile ? (e) => HandleMove(e) : null,
         onMouseUp: !mobile ? (e) => HandleUp(e) : null,
@@ -37,13 +37,9 @@ function Carousel({
       },
     };
   });
-
+  const mobile = window.screen.width < 1300;
   const [transPos, setTransPos] = useState(100 / list.length);
   const [silderWidth, setSliderWidth] = useState(list.length * 100);
-
-  console.log(silderWidth);
-  const [right, setRight] = useState(false);
-  const [left, setLeft] = useState(false);
   const [index, setIndex] = useState(0);
   const ref = useRef();
 
@@ -73,6 +69,9 @@ function Carousel({
 
   const HandleDown = (e) => {
     !mobile ? e.preventDefault() : null;
+    if (e.target.id == "controller") {
+      return null;
+    }
     const track = ref.current;
     down = true;
     if (e.clientX) {
@@ -132,7 +131,7 @@ function Carousel({
   };
 
   const handleLeaving = (e) => {
-    var x = e.clientX,
+    let x = e.clientX,
       y = e.clientY,
       elementMouseIsOver = document.elementFromPoint(x, y);
     if (
