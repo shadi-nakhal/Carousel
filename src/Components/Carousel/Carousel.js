@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import styles from "./styles";
+import "./styles.css";
 
 function Carousel({
   children = [],
@@ -31,15 +31,17 @@ function Carousel({
         onTouchMove: mobile ? (e) => HandleMove(e) : null,
         onTouchEnd: mobile ? (e) => HandleUp(e) : null,
         id: controller,
-        className: item.props.className + " " + "inside",
-        width: "100%",
-        height: "100%",
+        className: item.props.className
+          ? item.props.className + " " + "inside"
+          : "inside",
       },
     };
   });
-  console.log(list.length);
+
   const [transPos, setTransPos] = useState(100 / list.length);
   const [silderWidth, setSliderWidth] = useState(list.length * 100);
+
+  console.log(silderWidth);
   const [right, setRight] = useState(false);
   const [left, setLeft] = useState(false);
   const [index, setIndex] = useState(0);
@@ -48,7 +50,6 @@ function Carousel({
   var InitPos = 0;
   var moving = false;
   var Current = 0;
-  var Position = 0;
   var transform = 0;
 
   const handlePos = (e) => {
@@ -68,9 +69,9 @@ function Carousel({
         } else setIndex(list.length - 1);
     }
   };
-
+  // fixx the const trackkk replace it with an ID selector or something
   const HandleDown = (e) => {
-    e.preventDefault();
+    !mobile ? e.preventDefault() : null;
     const track = e.target.parentElement;
     down = true;
     if (e.clientX) {
@@ -87,7 +88,6 @@ function Carousel({
   };
 
   const HandleMove = (e) => {
-    const track = e.target.parentElement;
     if (down) {
       moving = true;
       let move;
@@ -109,7 +109,7 @@ function Carousel({
     }
     down = false;
     if (Current && Math.abs(Current) > 1 && moving) {
-      if (Current < -4) {
+      if (Current < -1) {
         if (index < list.length - 1) {
           setIndex(index + 1);
           Current = 0;
@@ -118,7 +118,7 @@ function Carousel({
 
           Current = 0;
         }
-      } else if (Current > 4) {
+      } else if (Current > 1) {
         if (index > 0) {
           setIndex(index - 1);
 
@@ -146,36 +146,20 @@ function Carousel({
 
   return (
     <div
-      // className="inside"
+      className="Carousel-Main"
       style={{
-        border: "2px solid #ccc",
-        overflow: "hidden",
-        position: "relative",
-        textAlign: "center",
         height: height,
         width: width,
-        userSelect: "none",
-        draggable: "false",
-        backgroundColor: "black",
       }}
     >
       <div
+        className="Carousel-Container"
         style={{
-          display: "flex",
           width: `${silderWidth}%`,
-          touchAction: "none",
           transform: "translate(-" + index * transPos + "%)",
-          // transition: "all 0.1s",
-          "-webkit-transition": !mobile
+          WebkitTransition: !mobile
             ? "-webkit-transform 50ms"
             : "-webkit-transform 00ms",
-          userSelect: "none",
-          flexBasis: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          cursor: "pointer",
-          height: "100%",
         }}
       >
         {list.map((child) => child)}
@@ -184,25 +168,18 @@ function Carousel({
         <span
           onClick={(e) => handlePos("left")}
           id="controller"
-          style={{
-            ...styles.left,
-            opacity: left ? "1" : "0.7",
-          }}
+          className="Car-Left"
         >
-          <i id="controller" style={styles.arrowleft}></i>
+          <i id="controller" className="Car-ArrowLeft"></i>
         </span>
         <span
           onClick={(e) => handlePos("right")}
           id="controller"
-          style={{
-            ...styles.right,
-
-            opacity: right ? "1" : "0.7",
-          }}
+          className="Car-Right"
         >
-          <i id="controller" style={styles.arrowright}></i>
+          <i id="controller" className="Car-ArrowRight"></i>
         </span>
-        <ul style={styles.controller}>
+        <ul className="Car-Controller">
           {list.map((item, i) => {
             return (
               <li
@@ -211,8 +188,8 @@ function Carousel({
                 }}
                 id="controller"
                 key={i + Math.random()}
+                className="Car-ControllerButton"
                 style={{
-                  ...styles.controllerButton,
                   backgroundColor: index == i ? "#555E65" : "#E9EDF0",
                 }}
               ></li>

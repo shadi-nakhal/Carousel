@@ -90,9 +90,6 @@ const styles = {
     cursor: "pointer",
     margin: "5px",
   },
-  selected: {
-    background: "transparent",
-  },
 };
 
 export default styles;
