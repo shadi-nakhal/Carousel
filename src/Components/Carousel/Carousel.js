@@ -45,6 +45,7 @@ function Carousel({
   const [right, setRight] = useState(false);
   const [left, setLeft] = useState(false);
   const [index, setIndex] = useState(0);
+  const ref = useRef();
 
   var down = false;
   var InitPos = 0;
@@ -69,10 +70,10 @@ function Carousel({
         } else setIndex(list.length - 1);
     }
   };
-  // fixx the const trackkk replace it with an ID selector or something
+
   const HandleDown = (e) => {
     !mobile ? e.preventDefault() : null;
-    const track = e.target.parentElement;
+    const track = ref.current;
     down = true;
     if (e.clientX) {
       InitPos = e.clientX;
@@ -88,6 +89,7 @@ function Carousel({
   };
 
   const HandleMove = (e) => {
+    const track = ref.current;
     if (down) {
       moving = true;
       let move;
@@ -97,9 +99,7 @@ function Carousel({
         move = e.touches[0].clientX;
       }
       Current = move - InitPos;
-      e.target.parentElement.style.transform = `translateX(${
-        Current + transform
-      }px)`;
+      track.style.transform = `translateX(${Current + transform}px)`;
     }
   };
 
@@ -154,6 +154,7 @@ function Carousel({
     >
       <div
         className="Carousel-Container"
+        ref={ref}
         style={{
           width: `${silderWidth}%`,
           transform: "translate(-" + index * transPos + "%)",
@@ -162,7 +163,16 @@ function Carousel({
             : "-webkit-transform 00ms",
         }}
       >
-        {list.map((child) => child)}
+        {list.map((child, i) => {
+          return (
+            <section
+              style={{ userSelect: "none", width: "100%", height: "100%" }}
+              key={i + Math.random}
+            >
+              {child}
+            </section>
+          );
+        })}
       </div>
       <div>
         <span
