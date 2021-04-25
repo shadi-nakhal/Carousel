@@ -1,40 +1,53 @@
 import React, { useState, useRef } from "react";
-import styles from "./styles";
+import "./styles.css";
 
-function Carousel({ items = [], swipeOff, height = "60vh", width = "100%" }) {
-  const list = items.map((item) => {
+function Carousel({
+  children = [],
+  swipeOff,
+  height = "60vh",
+  width = "100%",
+}) {
+  /*children is opaque data structure,
+   so this makes sure its always an array and ready to map over */
+  const makingList = Array.isArray(children) ? children : [children];
+
+  /*Mapping children to add props */
+  const list = makingList.map((item, index) => {
     let controller = "";
-    if (swipeOff == true) {
+    let modifiedItem = item;
+    if (swipeOff == true || item.props.swipeOff == true) {
       controller = "controller";
     }
+
     return {
-      ...item,
-      id: controller,
+      ...modifiedItem,
       props: {
-        ...item.props,
+        ...modifiedItem.props,
+        onMouseDown: !mobile ? (e) => HandleDown(e) : null,
+        onMouseMove: !mobile ? (e) => HandleMove(e) : null,
+        onMouseUp: !mobile ? (e) => HandleUp(e) : null,
+        onMouseLeave: !mobile ? (e) => handleLeaving(e) : null,
+        onTouchStart: mobile ? (e) => HandleDown(e) : null,
+        onTouchMove: mobile ? (e) => HandleMove(e) : null,
+        onTouchEnd: mobile ? (e) => HandleUp(e) : null,
         id: controller,
-        draggable: false,
-        width: "100%",
-        height: "100%",
+        className: item.props.className
+          ? item.props.className + " " + "inside"
+          : "inside",
       },
     };
   });
-
   const mobile = window.screen.width < 1300;
   const [transPos, setTransPos] = useState(100 / list.length);
   const [silderWidth, setSliderWidth] = useState(list.length * 100);
-  const [right, setRight] = useState(false);
-  const [left, setLeft] = useState(false);
   const [index, setIndex] = useState(0);
-  const [down, setDown] = useState(false);
-  const [InitPos, setInitPos] = useState();
-  const [moving, setmoving] = useState(false);
-  const [Current, setCurrent] = useState(0);
-  const Position = useRef({
-    Postion: null,
-  });
-  var pss;
-  var crr;
+  const ref = useRef();
+
+  var down = false;
+  var InitPos = 0;
+  var moving = false;
+  var Current = 0;
+  var transform = 0;
 
   const handlePos = (e) => {
     switch (e) {
@@ -55,36 +68,37 @@ function Carousel({ items = [], swipeOff, height = "60vh", width = "100%" }) {
   };
 
   const HandleDown = (e) => {
+    !mobile ? e.preventDefault() : null;
     if (e.target.id == "controller") {
-      Position.current.Postion = Current;
       return null;
     }
-    setInitPos(e.clientX);
-    setDown(true);
-    Position.current.Postion = Current;
+    const track = ref.current;
+    down = true;
+    if (e.clientX) {
+      InitPos = e.clientX;
+    } else {
+      InitPos = e.touches[0].clientX;
+    }
+    const transformMatrix = window
+      .getComputedStyle(track)
+      .getPropertyValue("transform");
+    if (transformMatrix !== "none") {
+      transform = Number(transformMatrix.split(",")[4].trim());
+    }
   };
 
   const HandleMove = (e) => {
-    let move;
-    move = e.clientX;
-    if (e.target.id == "controller") {
-      return null;
-    }
-
+    const track = ref.current;
     if (down) {
-      setCurrent(move - InitPos);
-      if (Current) {
-        let position = Math.round(
-          Current + e.currentTarget.getBoundingClientRect().x
-        );
-        Position.current.Postion = position;
-        setmoving(true);
+      moving = true;
+      let move;
+      if (e.clientX) {
+        move = e.clientX;
+      } else {
+        move = e.touches[0].clientX;
       }
-    } else {
-      Position.current.Postion = Current;
-      setmoving(false);
-      setDown(false);
-      setCurrent();
+      Current = move - InitPos;
+      track.style.transform = `translateX(${Current + transform}px)`;
     }
   };
 
@@ -92,135 +106,105 @@ function Carousel({ items = [], swipeOff, height = "60vh", width = "100%" }) {
     if (e.target.id == "controller") {
       return null;
     }
-    setDown(false);
-    if (Current && Math.abs(Current) > 100 && moving) {
-      if (Current < -10) {
+    down = false;
+    if (Current && Math.abs(Current) > 1 && moving) {
+      if (Current < -1) {
         if (index < list.length - 1) {
           setIndex(index + 1);
-          setCurrent();
+          Current = 0;
         } else {
           setIndex(0);
-          setCurrent();
+
+          Current = 0;
         }
-      } else if (Current > 10) {
+      } else if (Current > 1) {
         if (index > 0) {
           setIndex(index - 1);
-          setCurrent();
+
+          Current = 0;
         } else {
           setIndex(list.length - 1);
-          setCurrent();
+          Current = 0;
         }
       }
     }
-    setCurrent();
-
-    setmoving(false);
-    setDown(false);
-    Position.current.Postion = Current;
   };
 
-  const Touchdown = (e) => {
-    pss = e.touches[0].clientX;
-  };
-  const Touchmove = (e) => {
-    let move;
-    move = e.touches[0].clientX;
-    crr = move - pss;
-    let position = Math.round(crr + e.currentTarget.getBoundingClientRect().x);
-    Position.current.Postion = position;
-  };
-  const Touchup = (e) => {
-    if (crr < -10) {
-      if (index < list.length - 1) {
-        setIndex(index + 1);
-        setCurrent();
-      } else {
-        setIndex(0);
-        setCurrent();
-      }
-    } else if (crr > 10) {
-      if (index > 0) {
-        setIndex(index - 1);
-        setCurrent();
-      } else {
-        setIndex(list.length - 1);
-        setCurrent();
-      }
+  const handleLeaving = (e) => {
+    let x = e.clientX,
+      y = e.clientY,
+      elementMouseIsOver = document.elementFromPoint(x, y);
+    if (
+      elementMouseIsOver &&
+      !elementMouseIsOver.classList.contains("inside") &&
+      elementMouseIsOver.id !== "controller"
+    ) {
+      HandleUp(e);
     }
   };
-  return (
-    <div>
-      <div style={styles.container}>
-        <div style={{ ...styles.carousel, height: height, width: width }}>
-          <div
-            style={{
-              ...styles.slider,
-              width: silderWidth + "%",
-              touchAction: "none",
-              transform: down
-                ? "translateX(" + Position.current.Postion + "px)"
-                : "translate(-" + index * transPos + "%)",
-            }}
-            onMouseMove={!mobile ? (e) => HandleMove(e) : null}
-            onMouseDown={!mobile ? (e) => HandleDown(e) : null}
-            onMouseUp={!mobile ? (e) => HandleUp(e) : null}
-            onTouchStart={mobile ? (e) => Touchdown(e) : null}
-            onTouchMove={mobile ? (e) => Touchmove(e) : null}
-            onTouchEnd={mobile ? (e) => Touchup(e) : null}
-          >
-            {list.map((item, i) => {
-              return (
-                <section key={i + Math.random()} style={styles.section}>
-                  {item}
-                </section>
-              );
-            })}
-          </div>
-          <div>
-            <span
-              onClick={(e) => handlePos("left")}
-              onPointerEnter={() => setLeft(true)}
-              onPointerLeave={() => setLeft(false)}
-              id="controller"
-              style={{
-                ...styles.left,
-                opacity: left ? "1" : "0.7",
-              }}
-            >
-              <i id="controller" style={styles.arrowleft}></i>
-            </span>
-            <span
-              onClick={(e) => handlePos("right")}
-              onPointerEnter={() => setRight(true)}
-              onPointerLeave={() => setRight(false)}
-              id="controller"
-              style={{
-                ...styles.right,
 
-                opacity: right ? "1" : "0.7",
-              }}
+  return (
+    <div
+      className="Carousel-Main"
+      style={{
+        height: height,
+        width: width,
+      }}
+    >
+      <div
+        className="Carousel-Container"
+        ref={ref}
+        style={{
+          width: `${silderWidth}%`,
+          transform: "translate(-" + index * transPos + "%)",
+          WebkitTransition: !mobile
+            ? "-webkit-transform 50ms"
+            : "-webkit-transform 00ms",
+        }}
+      >
+        {list.map((child, i) => {
+          return (
+            <section
+              style={{ userSelect: "none", width: "100%", height: "100%" }}
+              key={i + Math.random}
             >
-              <i id="controller" style={styles.arrowright}></i>
-            </span>
-            <ul style={styles.controller}>
-              {list.map((item, i) => {
-                return (
-                  <li
-                    onClick={() => {
-                      setIndex(i);
-                    }}
-                    id="controller"
-                    key={i + Math.random()}
-                    style={{
-                      ...styles.controllerButton,
-                      backgroundColor: index == i ? "#555E65" : "#E9EDF0",
-                    }}
-                  ></li>
-                );
-              })}
-            </ul>
-          </div>
-        </div>
+              {child}
+            </section>
+          );
+        })}
+      </div>
+      <div>
+        <span
+          onClick={(e) => handlePos("left")}
+          id="controller"
+          className="Car-Left"
+        >
+          <i id="controller" className="Car-ArrowLeft"></i>
+        </span>
+        <span
+          onClick={(e) => handlePos("right")}
+          id="controller"
+          className="Car-Right"
+        >
+          <i id="controller" className="Car-ArrowRight"></i>
+        </span>
+        <ul className="Car-Controller">
+          {list.map((item, i) => {
+            return (
+              <li
+                onClick={() => {
+                  setIndex(i);
+                }}
+                id="controller"
+                key={i + Math.random()}
+                className="Car-ControllerButton"
+                style={{
+                  backgroundColor: index == i ? "#555E65" : "#E9EDF0",
+                }}
+              ></li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );

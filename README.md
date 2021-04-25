@@ -16,20 +16,17 @@
 
 ### Carousel componant
 
-```javascript
-<Carousel height="80vh" width="95vw" swipeOff items={items} />
-```
-
 ##### swipeOff to disable swipes
 
-##### items is an array, example :
+##### example :
 
 ```javascript
-const items2 = [
+<Carousel height="80vh" width="95vw">
   <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat,
-  </p>,
-  <img src="https://picsum.photos/200/300" alt="picture" />,
-  <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>,
-];
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat
+  </p>
+  <img swipeOff src="https://picsum.photos/800/400" alt="picture" />
+  <img src="https://picsum.photos/800/400" alt="picture" />
+  <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>
+</Carousel>
 ```
