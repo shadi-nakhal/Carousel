@@ -7,6 +7,7 @@ function Carousel({
   height = "60vh",
   width = "100%",
 }) {
+  const mobile = window.screen.width < 1300;
   /*children is opaque data structure,
    so this makes sure its always an array and ready to map over */
   const makingList = Array.isArray(children) ? children : [children];
@@ -37,7 +38,7 @@ function Carousel({
       },
     };
   });
-  const mobile = window.screen.width < 1300;
+
   const [transPos, setTransPos] = useState(100 / list.length);
   const [silderWidth, setSliderWidth] = useState(list.length * 100);
   const [index, setIndex] = useState(0);
